@@ -5,7 +5,7 @@ Will autoscan and tune into the most powerful AM broadcast up in the skies for a
 # Using
 
 ```console
-./start.sh 
+bash ./start.sh 
 2022-08-04 08:39:23,045 [INFO] Tuned to am channel 135.43
 2022-08-04 08:39:43,311 [INFO] Tuned to am channel 135.50
 2022-08-04 08:39:56,755 [INFO] Tuned to am channel 135.43
