@@ -29,10 +29,10 @@ CTRL-C
 
 | Item | Description |
 | :-: | :-:|
-| tuning_freq_ | Coarse tuning into the frequencies of interest, in 1MHz jumps. For example selecting 135000000 (135MHz) will let you listen in on activity within 134 MHz and 136 MHz. |
-| gain | Tune this using the Power/Frequency graph in the user interface so that you see a decent audio signals appear above a controlled noise floor. |   
-| rtl_device_arguments | Set blank if only using one USB dongle, otherwise use **rtl=1** for a second dongle etc. For a networked dongle with [rtl_tcp](https://manpages.ubuntu.com/manpages/trusty/man1/rtl_tcp.1.html) (which is installed as part of the rtlsdr package) use something like **rtl_tcp=192.168.1.57:1234**.  |
-| rtl_ppm_ | The clock error of your dongle, see [this](https://www.rtl-sdr.com/tag/ppm/) as one way of working out what that is. |  
+| tuning_freq | Coarse tuning into the frequencies of interest, in 1MHz jumps. For example selecting 135000000 (135MHz) will let you listen in on activity within 134 MHz and 136 MHz. |
+| gain | Tune this using the Power/Frequency graph in the user interface so that you see decent audio signals (the large upward spikes) appear on the graph above the noise floor. |   
+| rtl_device_arguments | Set blank if only using one USB dongle, otherwise use **rtl=1** for a selecting the second of two dongles etc. For a networked dongle with [rtl_tcp](https://manpages.ubuntu.com/manpages/trusty/man1/rtl_tcp.1.html) (which is installed as part of the rtlsdr package) use something like **rtl_tcp=192.168.1.57:1234**.  |
+| rtl_ppm | The clock error of your dongle, see [this](https://www.rtl-sdr.com/tag/ppm/) as one way of working out what that is. |  
 | carrier_squelch | Set this to the lowest power level (as in the displayed graph) of signals you want to listen to, bigger values have a better signal to noise ratio and sound clearer. |
 | audio_squelch | Lower this a bit if you never hear anything. Raise this a bit if you still hear noise after a transmissions has finished. |
 | hold_seconds | Do not tune into another concurrent (albeit higher signal to noise) audio channel for this interval (prevents rapid flipping between channels). |  
