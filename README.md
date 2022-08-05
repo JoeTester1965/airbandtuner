@@ -30,20 +30,22 @@ CTRL-C
 | Item | Description |
 | :-: | :-:|
 | tuning_freq_ | Coarse tuning into the frequencies of interest, in 1MHz jumps. For example selecting 135000000 (135MHz) will let you listen in on activity within 134 MHz and 136 MHz. |
-| gain | Tune this using the Power/Frequency graph in the user interface so that you see a decent audio signals appear above a controlled noise floor. I use a cheap 118-138 bandpass filter from AliExpress to good effect with a general purpose broadband discone antenna. |   
+| gain | Tune this using the Power/Frequency graph in the user interface so that you see a decent audio signals appear above a controlled noise floor. |   
 | rtl_device_arguments | Set blank if only using one USB dongle, otherwise use **rtl=1** for a second dongle etc. For a networked dongle with [rtl_tcp](https://manpages.ubuntu.com/manpages/trusty/man1/rtl_tcp.1.html) (which is installed as part of the rtlsdr package) use something like **rtl_tcp=192.168.1.57:1234**.  |
-| rtl_ppm_ | The error of your dongle, see [this](https://www.rtl-sdr.com/tag/ppm/) as one way of doing that.  |  
-| carrier_squelch | Set this to the lowest power level (as in the graph) onscreen of signals you want to listen to, bigger values have better signal to noise. |
+| rtl_ppm_ | The clock error of your dongle, see [this](https://www.rtl-sdr.com/tag/ppm/) as one way of working out what that is. |  
+| carrier_squelch | Set this to the lowest power level (as in the displayed graph) of signals you want to listen to, bigger values have a better signal to noise ratio and sound clearer. |
 | audio_squelch | Lower this a bit if you never hear anything. Raise this a bit if you still hear noise after a transmissions has finished. |
-| hold_seconds | Do not tune into another concurrent (albeit higher signal to noise) audio channel for however many seconds this is set at (i.e. mitigate rapid flipping between channels). |  
+| hold_seconds | Do not tune into another concurrent (albeit higher signal to noise) audio channel for this interval (prevents rapid flipping between channels). |  
 
 # Design
 
 ![!](./design.png "")
 
-Decided to delegate processing of the FFT for channel selection over the network to a custom python program rather than create a modified GNURadio LogPowerFFT block. Unfortunately the built in Max() block is no use as you need both the power and index from the FFT, not just power.
-
 You can still run the flow graph [airbandtuner.grc](https://github.com/JoeTester1965/airbandtuner/blob/main/airbandtuner.grc) in gnuradio-companion without running [airbandtunerclient.py](https://github.com/JoeTester1965/airbandtuner/blob/main/airbandtunerclient.py) as well, it just will not auto tune into the audio. 
+
+I decided to delegate processing of the FFT for channel selection over the network to a custom python program as unfortunately the built in GNURadio Max() block is no use as you need the index from the FFT for tuning as well as the power value. 
+
+There are upsides to this though ...
 
 # Future possibilities
 
