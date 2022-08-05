@@ -38,12 +38,6 @@ last_time_tuned = time.time()
 update_ui_seconds = 1
 last_time_updated_ui = time.time()
 
-if zmq_pub_sink.poll(10) != 0:
-    msg = zmq_pub_sink.recv()
-    message_size = len(msg)
-    data = np.frombuffer(msg, dtype=np.float32, count=fft_resolution)
-    last_index = np.argmax(data)
-
 while True:
     if zmq_pub_sink.poll(10) != 0:
         msg = zmq_pub_sink.recv()
@@ -64,7 +58,5 @@ while True:
     if  (time.time() - last_time_updated_ui) > update_ui_seconds:
         last_time_updated_ui = time.time()
         carrier_squelch = s.get_carrier_squelch()
-        samp_rate = s.get_samp_rate()
         tuning_freq = s.get_tuning_freq()
-        fft_resolution = s.get_fft_resolution()
         hold_seconds = s.get_hold_seconds()
