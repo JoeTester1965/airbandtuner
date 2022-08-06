@@ -17,7 +17,7 @@ CTRL-C
 
 # Dependancies
 
-* [GNURadio](https://wiki.gnuradio.org/index.php/InstallingGR) Note: have only tested on 3.10.
+* [GNURadio](https://wiki.gnuradio.org/index.php/InstallingGR) Note: works on GNURADIO 3.10 but not 3.8, am not sure about 3.9.
 
 * [rtl-sdr](https://www.rtl-sdr.com/rtl-sdr-quick-start-guide/) Note: On Linux just do sudo apt-get install rtl-sdr.
 
