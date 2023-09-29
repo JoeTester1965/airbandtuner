@@ -4,11 +4,13 @@ Will autoscan and tune into the most powerful AM broadcast up in the skies for a
 
 # Using
 
-First of all use gnuradio_companion to edit airbandtuner.grc with meaningful values in your netowrk for AudioStreamIP and AudioStreamPort (where network audio is pushed) and rtl_device_arguments (where your RTL dongle is).
+First of all use gnuradio_companion to edit airbandtuner.grc with meaningful values in your netowrk for AudioStreamIP , AudioStreamPort (where network audio is pushed), and  rtl_device_arguments , rtl_ppm  (your RTL dongle).
 
 Audio can be heard remotely as well as on the default target audio port using the following command (for me only works on *nix not windoze):
 
 vlc --demux=rawaud --rawaud-channels=1 --rawaud-samplerate=48000 udp://@:AudioStreamPort
+
+Then:
 
 ```console
 bash ./start.sh 
