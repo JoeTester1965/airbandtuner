@@ -2,7 +2,7 @@
 
 Will autoscan and tune into the most powerful AM broadcast up in the skies for a large frequency range wherever you tune your RTL dongle.
 
-Audio can be heard remotely over the Internet as well as on the default target audio port.
+Audio can be heard remotely over the Internet as well as on the devices audio port.
 
 # Using
 
