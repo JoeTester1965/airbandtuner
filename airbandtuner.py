@@ -89,7 +89,7 @@ class airbandtuner(gr.top_block, Qt.QWidget):
         self.tuning_freq = tuning_freq = 135e6
         self.samp_rate = samp_rate = 1.92e6
         self.rtl_ppm = rtl_ppm = (-1)
-        self.rtl_device_arguments = rtl_device_arguments = 'rtl_tcp=192.168.1.57:1234'
+        self.rtl_device_arguments = rtl_device_arguments = ''
         self.hold_seconds = hold_seconds = 5
         self.gain = gain = 45
         self.fft_resolution = fft_resolution = 4096
