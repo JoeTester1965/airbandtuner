@@ -33,6 +33,36 @@ options:
     state: enabled
 
 blocks:
+- name: AudioStreamIP
+  id: variable_qtgui_entry
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    type: string
+    value: 192.168.1.111
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1064, 20.0]
+    rotation: 0
+    state: true
+- name: AudioStreamPort
+  id: variable_qtgui_entry
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    type: int
+    value: '7355'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1128, 84.0]
+    rotation: 0
+    state: true
 - name: audio_gain
   id: variable
   parameters:
@@ -117,7 +147,7 @@ blocks:
     start: '0'
     step: '1'
     stop: '49'
-    value: '45'
+    value: '35'
     widget: counter_slider
   states:
     bus_sink: false
@@ -226,7 +256,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [610, 328]
+    coordinate: [600, 348.0]
     rotation: 0
     state: enabled
 - name: analog_feedforward_agc_cc_0
@@ -280,9 +310,42 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [974, 365]
+    coordinate: [1000, 372.0]
     rotation: 0
     state: enabled
+- name: blocks_endian_swap_0
+  id: blocks_endian_swap
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: s16
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [992, 264.0]
+    rotation: 0
+    state: true
+- name: blocks_float_to_short_0
+  id: blocks_float_to_short
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '126'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 204.0]
+    rotation: 0
+    state: true
 - name: blocks_multiply_const_vxx_0
   id: blocks_multiply_const_vxx
   parameters:
@@ -344,6 +407,26 @@ blocks:
     coordinate: [396, 256]
     rotation: 0
     state: true
+- name: network_udp_sink_0
+  id: network_udp_sink
+  parameters:
+    addr: AudioStreamIP
+    affinity: ''
+    alias: ''
+    comment: ''
+    header: '0'
+    payloadsize: '1472'
+    port: AudioStreamPort
+    send_eof: 'False'
+    type: short
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1112, 164.0]
+    rotation: 0
+    state: true
 - name: note_0
   id: note
   parameters:
@@ -396,6 +479,87 @@ blocks:
     coordinate: [451, 10]
     rotation: 0
     state: true
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: '48000'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: Audio spectrum
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: float
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_HAMMING
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1144, 276.0]
+    rotation: 0
+    state: true
 - name: qtgui_vector_sink_f_0
   id: qtgui_vector_sink_f
   parameters:
@@ -436,10 +600,9 @@ blocks:
     label7: ''
     label8: ''
     label9: ''
-    legend: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: '""'
+    name: Radio spectrum
     nconnections: '1'
     ref_level: '0'
     showports: 'False'
@@ -838,7 +1001,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 77]
+    coordinate: [840, 84.0]
     rotation: 0
     state: true
 - name: zeromq_pub_sink_1
@@ -884,7 +1047,11 @@ connections:
 - [analog_am_demod_cf_0, '0', blocks_multiply_const_vxx_0, '0']
 - [analog_feedforward_agc_cc_0, '0', analog_pwr_squelch_xx_0, '0']
 - [analog_pwr_squelch_xx_0, '0', analog_am_demod_cf_0, '0']
+- [blocks_endian_swap_0, '0', network_udp_sink_0, '0']
+- [blocks_float_to_short_0, '0', blocks_endian_swap_0, '0']
 - [blocks_multiply_const_vxx_0, '0', audio_sink_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_float_to_short_0, '0']
+- [blocks_multiply_const_vxx_0, '0', qtgui_freq_sink_x_0, '0']
 - [freq_xlating_fir_filter_xxx_0, '0', analog_feedforward_agc_cc_0, '0']
 - [logpwrfft_x_0, '0', qtgui_vector_sink_f_0, '0']
 - [logpwrfft_x_0, '0', zeromq_pub_sink_1, '0']
@@ -894,4 +1061,3 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: 3.10.3.0
