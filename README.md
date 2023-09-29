@@ -2,13 +2,19 @@
 
 Will autoscan and tune into the most powerful AM broadcast up in the skies for a large frequency range wherever you tune your RTL dongle.
 
+Audio can be heard remotely over the Internet as well as on the default target audio port.
+
 # Using
 
-First of all use gnuradio_companion to edit airbandtuner.grc with meaningful values in your netowrk for AudioStreamIP , AudioStreamPort (where network audio is pushed), and  rtl_device_arguments , rtl_ppm  (your RTL dongle).
+First of all use gnuradio_companion to edit the following variables in airbandtuner.grc then generate a python file.
+- rtl_device_arguments
+- rtl_ppm  (your RTL dongle setup)
+- AudioStreamIP
+- AudioStreamPort (where network audio is pushed)
 
-Audio can be heard remotely as well as on the default target audio port using the following command (for me only works on *nix not windoze):
+For remote audio using the following command (for me only works on *nix not windoze):
 
-vlc --demux=rawaud --rawaud-channels=1 --rawaud-samplerate=48000 udp://@:AudioStreamPort
+```vlc --demux=rawaud --rawaud-channels=1 --rawaud-samplerate=48000 udp://@:AudioStreamPort```
 
 Then:
 
