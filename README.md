@@ -8,11 +8,11 @@ Audio can be heard remotely over the Internet as well as on the devices audio po
 
 First of all use gnuradio_companion to edit the following variables in airbandtuner.grc then generate a python file.
 - rtl_device_arguments
-- rtl_ppm  (your RTL dongle setup)
+- rtl_ppm 
 - AudioStreamIP
-- AudioStreamPort (where network audio is pushed)
+- AudioStreamPort
 
-For remote audio using the following command (for me only works on *nix not windoze):
+That step is needed to configure your RTL dongle and remote audio. To listen to remote audio using the following command (for me only works on *nix not windoze):
 
 ```vlc --demux=rawaud --rawaud-channels=1 --rawaud-samplerate=48000 udp://@:AudioStreamPort```
 
