@@ -2,19 +2,22 @@
 
 Will autoscan and tune into the most powerful AM broadcast up in the skies for a large frequency range wherever you tune your RTL dongle.
 
-Audio can be heard remotely over the Internet as well as on the devices audio port.
+Audio can be heard remotely over the Internet by typing the following URL into something like VLC player:
+
+```http://my-ip-address:AudioStreamPort/```  e.g.  ```http://192.168.1.50:8087/```
+
+The audio server works using vlc to capture and rebroadcast the audio arriving in from gnuradio.
+
+If you have issues with port conflicts, edit [start.sh](start.sh) for VLC (8087) and use gnuradio_companion to edit AudioStreamPort (7355) in airbandtuner.grc and regenerate airbandtuner.py.
+
 
 # Using
 
-First of all use gnuradio_companion to edit the following variables in airbandtuner.grc then generate a python file.
-- rtl_device_arguments
-- rtl_ppm 
-- AudioStreamIP
-- AudioStreamPort
+First of all use gnuradio_companion to edit the following variables in airbandtuner.grc then regenerate airbandtuner.py;
 
-That step is needed to configure your RTL dongle and remote audio. To listen to remote audio using the following command (for me only works on *nix not windoze):
+- rtl_device_arguments  (leave blank if simply one USB device, otherwise use rtl_tcp=a.b.c.d etc, see [this](https://manpages.ubuntu.com/manpages/trusty/man1/rtl_tcp.1.html) for more details)
+- rtl_ppm (not really needed)
 
-```vlc --demux=rawaud --rawaud-channels=1 --rawaud-samplerate=48000 udp://@:AudioStreamPort```
 
 Then:
 
@@ -31,11 +34,13 @@ CTRL-C
 
 # Dependancies
 
-* [GNURadio](https://wiki.gnuradio.org/index.php/InstallingGR) Note: works on GNURADIO 3.10 and 3.9 but not 3.8, recently tested with the excellent [PiSDR](https://github.com/luigifcruz/pisdr-image) distro 6.1.
+This runs on Linux, recently tested with the excellent [PiSDR](https://github.com/luigifcruz/pisdr-image) distro 6.1.
+
+* [GNURadio](https://wiki.gnuradio.org/index.php/InstallingGR) Note: works on GNURADIO 3.10 and 3.9 but not 3.8.
 
 * [rtl-sdr](https://www.rtl-sdr.com/rtl-sdr-quick-start-guide/) Note: On Linux just do sudo apt-get install rtl-sdr.
 
-* A default audio out device compatible with GnuRadio.
+* [vlc](https://www.videolan.org/vlc/)
 
 # User interface
 
@@ -45,10 +50,7 @@ CTRL-C
 | :-: | :-:|
 | tuning_freq | Coarse tuning into the frequencies of interest, in 1MHz jumps. For example selecting 135000000 (135MHz) will let you listen in on activity within 134 MHz and 136 MHz. |
 | gain | Tune this using the Power/Frequency graph in the user interface so that you see decent audio signals (the large upward spikes) appear on the graph above the noise floor. |   
-| rtl_device_arguments | Set blank if only using one USB dongle, otherwise use **rtl=1** for a selecting the second of two dongles etc. For a networked dongle with [rtl_tcp](https://manpages.ubuntu.com/manpages/trusty/man1/rtl_tcp.1.html) (which is installed as part of the rtlsdr package) use something like **rtl_tcp=192.168.1.57:1234**.  |
-| rtl_ppm | The clock error of your dongle, see [this](https://www.rtl-sdr.com/tag/ppm/) as one way of working out what that is. |  
 | carrier_squelch | Set this to the lowest power level (as in the displayed graph) of signals you want to listen to, bigger values have a better signal to noise ratio and sound clearer. |
-| audio_squelch | Lower this a bit if you never hear anything. Raise this a bit if you still hear noise after a transmissions has finished. |
 | hold_seconds | Do not tune into another concurrent (albeit higher signal to noise) audio channel for this interval (prevents rapid flipping between channels). |  
 
 # Design
