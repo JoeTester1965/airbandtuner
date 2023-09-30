@@ -4,7 +4,7 @@ Will autoscan and tune into the most powerful AM broadcast up in the skies for a
 
 Audio can be heard remotely over the Internet by typing the following URL into something like VLC player:
 
-```http://my-ip-address:AudioStreamPort/```  e.g.  ```http://192.168.1.50:8087/```
+```http://my-ip-address:AudioStreamPort```  e.g.  ```http://192.168.1.50:8087```
 
 The audio server works using vlc to capture and rebroadcast the audio arriving in from gnuradio.
 
