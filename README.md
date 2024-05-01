@@ -12,7 +12,7 @@ Or a [SoapyRemote](https://github.com/pothosware/SoapyRemote) device:
 
 Audio can be heard either through the local default sound card or remotely by starting VLC player on the host corresponding with **AudioStreamIP** using **AudioPort** as defined in the [gnuradio sketch](./design.png).
 
-e.g. as in the defaults, on 127.0.0.0.1 type:
+e.g. as in the defaults, on 127.0.0.1 type:
 
 ```vlc -I dummy --demux=rawaud --rawaud-channels=1 --rawaud-samplerate=48000 udp://@:7355```
 
