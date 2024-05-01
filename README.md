@@ -49,8 +49,8 @@ For SoapyRemote
 sudo apt-get install soapyremote-server
 ```
 
-AFor remote audio client
-```
+For remote audio client
+```console
 sudo apt-get install vlc
 ```
 
