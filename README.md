@@ -87,7 +87,7 @@ There are upsides to this though ...
 
 ## Contributing
 
-Please do email JoeTester1965 at mail dot com with any questions.
+Please do email JoeTester1965 at email dot com with any questions.
 
 ## License
 
