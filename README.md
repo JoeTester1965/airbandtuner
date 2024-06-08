@@ -41,7 +41,7 @@ Tested on Ubuntu 22.04.4 (GnuRadio 3.10). Should also work on 3.9 but not below 
 sudo add-apt-repository ppa:gnuradio/gnuradio-releases
 sudo apt-get update
 sudo apt-get install gnuradio
-sudo apt-get install soapysdr-module-all, rtl_sdr
+sudo apt-get install soapysdr-module-all rtl-sdr
 ```
 
 For SoapyRemote
