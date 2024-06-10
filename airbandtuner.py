@@ -8,22 +8,33 @@
 # Title: AirBandTuner
 # Author: JoeTester1965
 # Copyright: MIT license
-# GNU Radio version: 3.10.7.0
+# GNU Radio version: 3.10.1.1
 
 from packaging.version import Version as StrictVersion
+
+if __name__ == '__main__':
+    import ctypes
+    import sys
+    if sys.platform.startswith('linux'):
+        try:
+            x11 = ctypes.cdll.LoadLibrary('libX11.so')
+            x11.XInitThreads()
+        except:
+            print("Warning: failed to XInitThreads()")
+
 from PyQt5 import Qt
+from gnuradio import eng_notation
 from gnuradio import qtgui
+import sip
 from gnuradio import analog
 from gnuradio import audio
 from gnuradio import blocks
-from gnuradio import eng_notation
 from gnuradio import filter
 from gnuradio.filter import firdes
 from gnuradio import gr
 from gnuradio.fft import window
 import sys
 import signal
-from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import network
@@ -34,9 +45,10 @@ from gnuradio.qtgui import Range, RangeWidget
 from PyQt5 import QtCore
 from xmlrpc.server import SimpleXMLRPCServer
 import threading
-import sip
 
 
+
+from gnuradio import qtgui
 
 class airbandtuner(gr.top_block, Qt.QWidget):
 
@@ -47,8 +59,8 @@ class airbandtuner(gr.top_block, Qt.QWidget):
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
-        except BaseException as exc:
-            print(f"Qt GUI: Could not set Icon: {str(exc)}", file=sys.stderr)
+        except:
+            pass
         self.top_scroll_layout = Qt.QVBoxLayout()
         self.setLayout(self.top_scroll_layout)
         self.top_scroll = Qt.QScrollArea()
@@ -68,8 +80,8 @@ class airbandtuner(gr.top_block, Qt.QWidget):
                 self.restoreGeometry(self.settings.value("geometry").toByteArray())
             else:
                 self.restoreGeometry(self.settings.value("geometry"))
-        except BaseException as exc:
-            print(f"Qt GUI: Could not restore geometry: {str(exc)}", file=sys.stderr)
+        except:
+            pass
 
         ##################################################
         # Variables
@@ -81,7 +93,7 @@ class airbandtuner(gr.top_block, Qt.QWidget):
         self.gain = gain = 35
         self.fft_resolution = fft_resolution = 4096
         self.decimation = decimation = 40
-        self.carrier_squelch = carrier_squelch = (-40)
+        self.carrier_squelch = carrier_squelch = -40
         self.audio_gain = audio_gain = 126
         self.AudioStreamPort = AudioStreamPort = 7355
         self.AudioStreamIP = AudioStreamIP = '127.0.0.1'
@@ -89,7 +101,6 @@ class airbandtuner(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-
         self._tuning_freq_range = Range(108e6, 137e6, 1000000, 135e6, 200)
         self._tuning_freq_win = RangeWidget(self._tuning_freq_range, self.set_tuning_freq, "'tuning_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._tuning_freq_win, 0, 0, 1, 1)
@@ -126,6 +137,13 @@ class airbandtuner(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self._carrier_squelch_range = Range(-90, -20, 1, -40, 200)
+        self._carrier_squelch_win = RangeWidget(self._carrier_squelch_range, self.set_carrier_squelch, "'carrier_squelch'", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._carrier_squelch_win, 2, 0, 1, 1)
+        for r in range(2, 3):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self._AudioStreamPort_tool_bar = Qt.QToolBar(self)
         self._AudioStreamPort_tool_bar.addWidget(Qt.QLabel("'AudioStreamPort'" + ": "))
         self._AudioStreamPort_line_edit = Qt.QLineEdit(str(self.AudioStreamPort))
@@ -149,7 +167,7 @@ class airbandtuner(gr.top_block, Qt.QWidget):
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.zeromq_pull_msg_source_0 = zeromq.pull_msg_source('tcp://127.0.0.1:50241', 100, False)
-        self.zeromq_pub_sink_1 = zeromq.pub_sink(gr.sizeof_float, fft_resolution, 'tcp://127.0.0.1:50242', 100, False, (-1), '', True, True)
+        self.zeromq_pub_sink_1 = zeromq.pub_sink(gr.sizeof_float, fft_resolution, 'tcp://127.0.0.1:50242', 100, False, -1, '')
         self.xmlrpc_server_0 = SimpleXMLRPCServer(('localhost', 50240), allow_none=True)
         self.xmlrpc_server_0.register_instance(self)
         self.xmlrpc_server_0_thread = threading.Thread(target=self.xmlrpc_server_0.serve_forever)
@@ -161,39 +179,17 @@ class airbandtuner(gr.top_block, Qt.QWidget):
         tune_args = ['']
         settings = ['']
 
-        def _set_soapy_rtlsdr_source_0_gain_mode(channel, agc):
-            self.soapy_rtlsdr_source_0.set_gain_mode(channel, agc)
-            if not agc:
-                  self.soapy_rtlsdr_source_0.set_gain(channel, self._soapy_rtlsdr_source_0_gain_value)
-        self.set_soapy_rtlsdr_source_0_gain_mode = _set_soapy_rtlsdr_source_0_gain_mode
-
-        def _set_soapy_rtlsdr_source_0_gain(channel, name, gain):
-            self._soapy_rtlsdr_source_0_gain_value = gain
-            if not self.soapy_rtlsdr_source_0.get_gain_mode(channel):
-                self.soapy_rtlsdr_source_0.set_gain(channel, gain)
-        self.set_soapy_rtlsdr_source_0_gain = _set_soapy_rtlsdr_source_0_gain
-
-        def _set_soapy_rtlsdr_source_0_bias(bias):
-            if 'biastee' in self._soapy_rtlsdr_source_0_setting_keys:
-                self.soapy_rtlsdr_source_0.write_setting('biastee', bias)
-        self.set_soapy_rtlsdr_source_0_bias = _set_soapy_rtlsdr_source_0_bias
-
-        self.soapy_rtlsdr_source_0 = soapy.source(dev, "fc32", 1, 'remote=192.168.1.50,driver=remote,remote:timeout=100000,remote:driver=rtlsdr,rtl=0',
+        self.soapy_rtlsdr_source_0 = soapy.source(dev, "fc32", 1, 'remote=127.0.0.1,driver=remote,remote:timeout=100000,remote:driver=rtlsdr,rtl=0',
                                   stream_args, tune_args, settings)
-
-        self._soapy_rtlsdr_source_0_setting_keys = [a.key for a in self.soapy_rtlsdr_source_0.get_setting_info()]
-
         self.soapy_rtlsdr_source_0.set_sample_rate(0, samp_rate)
+        self.soapy_rtlsdr_source_0.set_gain_mode(0, False)
         self.soapy_rtlsdr_source_0.set_frequency(0, tuning_freq)
         self.soapy_rtlsdr_source_0.set_frequency_correction(0, ppm)
-        self.set_soapy_rtlsdr_source_0_bias(bool(False))
-        self._soapy_rtlsdr_source_0_gain_value = gain
-        self.set_soapy_rtlsdr_source_0_gain_mode(0, bool(False))
-        self.set_soapy_rtlsdr_source_0_gain(0, 'TUNER', gain)
+        self.soapy_rtlsdr_source_0.set_gain(0, 'TUNER', gain)
         self.qtgui_vector_sink_f_0 = qtgui.vector_sink_f(
             fft_resolution,
-            (tuning_freq - (samp_rate/2)),
-            (samp_rate/fft_resolution),
+            tuning_freq - (samp_rate/2),
+            samp_rate/fft_resolution,
             'Frequency',
             'Power',
             'Radio spectrum',
@@ -201,13 +197,12 @@ class airbandtuner(gr.top_block, Qt.QWidget):
             None # parent
         )
         self.qtgui_vector_sink_f_0.set_update_time(0.10)
-        self.qtgui_vector_sink_f_0.set_y_axis((-140), 10)
+        self.qtgui_vector_sink_f_0.set_y_axis(-140, 10)
         self.qtgui_vector_sink_f_0.enable_autoscale(False)
         self.qtgui_vector_sink_f_0.enable_grid(False)
         self.qtgui_vector_sink_f_0.set_x_axis_units('Hz')
         self.qtgui_vector_sink_f_0.set_y_axis_units('dB')
-        self.qtgui_vector_sink_f_0.set_ref_level(0)
-
+        self.qtgui_vector_sink_f_0.set_ref_level(carrier_squelch)
 
         labels = ['', '', '', '', '',
             '', '', '', '', '']
@@ -246,19 +241,13 @@ class airbandtuner(gr.top_block, Qt.QWidget):
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.freq_xlating_fir_filter_xxx_0 = filter.freq_xlating_fir_filter_ccc(decimation,  firdes.low_pass(1,samp_rate,samp_rate/decimation/8,1000), 0, samp_rate)
-        self._carrier_squelch_range = Range((-90), (-20), 1, (-40), 200)
-        self._carrier_squelch_win = RangeWidget(self._carrier_squelch_range, self.set_carrier_squelch, "'carrier_squelch'", "counter_slider", int, QtCore.Qt.Horizontal)
-        self.top_grid_layout.addWidget(self._carrier_squelch_win, 2, 0, 1, 1)
-        for r in range(2, 3):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(0, 1):
-            self.top_grid_layout.setColumnStretch(c, 1)
         self.blocks_float_to_short_0 = blocks.float_to_short(1, audio_gain)
         self.blocks_endian_swap_0 = blocks.endian_swap(2)
         self.audio_sink_0 = audio.sink(44100, '', True)
+        self.analog_pwr_squelch_xx_0 = analog.pwr_squelch_cc(carrier_squelch, 1e-4, 0, True)
         self.analog_feedforward_agc_cc_0 = analog.feedforward_agc_cc(1024, 1.0)
         self.analog_am_demod_cf_0 = analog.am_demod_cf(
-        	channel_rate=(samp_rate/decimation),
+        	channel_rate=samp_rate/decimation,
         	audio_decim=1,
         	audio_pass=4000,
         	audio_stop=4500,
@@ -272,9 +261,10 @@ class airbandtuner(gr.top_block, Qt.QWidget):
         self.connect((self.analog_am_demod_cf_0, 0), (self.audio_sink_0, 0))
         self.connect((self.analog_am_demod_cf_0, 0), (self.blocks_float_to_short_0, 0))
         self.connect((self.analog_feedforward_agc_cc_0, 0), (self.analog_am_demod_cf_0, 0))
+        self.connect((self.analog_pwr_squelch_xx_0, 0), (self.analog_feedforward_agc_cc_0, 0))
         self.connect((self.blocks_endian_swap_0, 0), (self.network_udp_sink_0, 0))
         self.connect((self.blocks_float_to_short_0, 0), (self.blocks_endian_swap_0, 0))
-        self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.analog_feedforward_agc_cc_0, 0))
+        self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.analog_pwr_squelch_xx_0, 0))
         self.connect((self.logpwrfft_x_0, 0), (self.qtgui_vector_sink_f_0, 0))
         self.connect((self.logpwrfft_x_0, 0), (self.zeromq_pub_sink_1, 0))
         self.connect((self.soapy_rtlsdr_source_0, 0), (self.freq_xlating_fir_filter_xxx_0, 0))
@@ -294,7 +284,7 @@ class airbandtuner(gr.top_block, Qt.QWidget):
 
     def set_tuning_freq(self, tuning_freq):
         self.tuning_freq = tuning_freq
-        self.qtgui_vector_sink_f_0.set_x_axis((self.tuning_freq - (self.samp_rate/2)), (self.samp_rate/self.fft_resolution))
+        self.qtgui_vector_sink_f_0.set_x_axis(self.tuning_freq - (self.samp_rate/2), self.samp_rate/self.fft_resolution)
         self.soapy_rtlsdr_source_0.set_frequency(0, self.tuning_freq)
 
     def get_samp_rate(self):
@@ -305,7 +295,7 @@ class airbandtuner(gr.top_block, Qt.QWidget):
         Qt.QMetaObject.invokeMethod(self._samp_rate_line_edit, "setText", Qt.Q_ARG("QString", str(self.samp_rate)))
         self.freq_xlating_fir_filter_xxx_0.set_taps( firdes.low_pass(1,self.samp_rate,self.samp_rate/self.decimation/8,1000))
         self.logpwrfft_x_0.set_sample_rate(self.samp_rate)
-        self.qtgui_vector_sink_f_0.set_x_axis((self.tuning_freq - (self.samp_rate/2)), (self.samp_rate/self.fft_resolution))
+        self.qtgui_vector_sink_f_0.set_x_axis(self.tuning_freq - (self.samp_rate/2), self.samp_rate/self.fft_resolution)
         self.soapy_rtlsdr_source_0.set_sample_rate(0, self.samp_rate)
 
     def get_ppm(self):
@@ -327,14 +317,14 @@ class airbandtuner(gr.top_block, Qt.QWidget):
 
     def set_gain(self, gain):
         self.gain = gain
-        self.set_soapy_rtlsdr_source_0_gain(0, 'TUNER', self.gain)
+        self.soapy_rtlsdr_source_0.set_gain(0, 'TUNER', self.gain)
 
     def get_fft_resolution(self):
         return self.fft_resolution
 
     def set_fft_resolution(self, fft_resolution):
         self.fft_resolution = fft_resolution
-        self.qtgui_vector_sink_f_0.set_x_axis((self.tuning_freq - (self.samp_rate/2)), (self.samp_rate/self.fft_resolution))
+        self.qtgui_vector_sink_f_0.set_x_axis(self.tuning_freq - (self.samp_rate/2), self.samp_rate/self.fft_resolution)
 
     def get_decimation(self):
         return self.decimation
@@ -348,6 +338,8 @@ class airbandtuner(gr.top_block, Qt.QWidget):
 
     def set_carrier_squelch(self, carrier_squelch):
         self.carrier_squelch = carrier_squelch
+        self.analog_pwr_squelch_xx_0.set_threshold(self.carrier_squelch)
+        self.qtgui_vector_sink_f_0.set_ref_level(self.carrier_squelch)
 
     def get_audio_gain(self):
         return self.audio_gain

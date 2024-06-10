@@ -229,7 +229,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [872, 436.0]
+    coordinate: [880, 476.0]
     rotation: 0
     state: enabled
 - name: analog_feedforward_agc_cc_0
@@ -246,7 +246,27 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 452.0]
+    coordinate: [680, 444.0]
+    rotation: 0
+    state: true
+- name: analog_pwr_squelch_xx_0
+  id: analog_pwr_squelch_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: 1e-4
+    comment: ''
+    gate: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    ramp: '0'
+    threshold: carrier_squelch
+    type: complex
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [616, 564.0]
     rotation: 0
     state: true
 - name: audio_sink_0
@@ -263,7 +283,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 500.0]
+    coordinate: [1128, 484.0]
     rotation: 0
     state: enabled
 - name: blocks_endian_swap_0
@@ -279,7 +299,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [888, 320.0]
+    coordinate: [896, 328.0]
     rotation: 0
     state: true
 - name: blocks_float_to_short_0
@@ -296,7 +316,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [888, 372.0]
+    coordinate: [888, 396.0]
     rotation: 0
     state: true
 - name: freq_xlating_fir_filter_xxx_0
@@ -428,12 +448,11 @@ blocks:
     label7: ''
     label8: ''
     label9: ''
-    legend: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
     name: Radio spectrum
     nconnections: '1'
-    ref_level: '0'
+    ref_level: carrier_squelch
     showports: 'False'
     update_time: '0.10'
     vlen: fft_resolution
@@ -468,10 +487,9 @@ blocks:
     affinity: ''
     agc: 'False'
     alias: ''
-    bias: 'False'
     center_freq: tuning_freq
     comment: ''
-    dev_args: remote=192.168.1.50,driver=remote,remote:timeout=100000,remote:driver=rtlsdr,rtl=0
+    dev_args: remote=127.0.0.1,driver=remote,remote:timeout=100000,remote:driver=rtlsdr,rtl=0
     freq_correction: ppm
     gain: gain
     maxoutbuf: '0'
@@ -482,9 +500,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [120, 340.0]
+    coordinate: [104, 340.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: xmlrpc_server_0
   id: xmlrpc_server
   parameters:
@@ -505,9 +523,7 @@ blocks:
     address: tcp://127.0.0.1:50242
     affinity: ''
     alias: ''
-    bind: 'True'
     comment: ''
-    drop_on_hwm: 'True'
     hwm: '-1'
     key: ''
     pass_tags: 'False'
@@ -544,9 +560,10 @@ connections:
 - [analog_am_demod_cf_0, '0', audio_sink_0, '0']
 - [analog_am_demod_cf_0, '0', blocks_float_to_short_0, '0']
 - [analog_feedforward_agc_cc_0, '0', analog_am_demod_cf_0, '0']
+- [analog_pwr_squelch_xx_0, '0', analog_feedforward_agc_cc_0, '0']
 - [blocks_endian_swap_0, '0', network_udp_sink_0, '0']
 - [blocks_float_to_short_0, '0', blocks_endian_swap_0, '0']
-- [freq_xlating_fir_filter_xxx_0, '0', analog_feedforward_agc_cc_0, '0']
+- [freq_xlating_fir_filter_xxx_0, '0', analog_pwr_squelch_xx_0, '0']
 - [logpwrfft_x_0, '0', qtgui_vector_sink_f_0, '0']
 - [logpwrfft_x_0, '0', zeromq_pub_sink_1, '0']
 - [soapy_rtlsdr_source_0, '0', freq_xlating_fir_filter_xxx_0, '0']
@@ -555,4 +572,3 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: 3.10.7.0
