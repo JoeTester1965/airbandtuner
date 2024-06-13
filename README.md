@@ -46,7 +46,7 @@ sudo apt-get install soapysdr-module-all rtl-sdr
 
 For SoapyRemote
 ```console
-sudo apt-get install soapyremote-server
+sudo apt-get install soapyremote-server soapysdr-module-all
 ```
 
 For remote audio client
