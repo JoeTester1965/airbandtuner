@@ -489,7 +489,7 @@ blocks:
     alias: ''
     center_freq: tuning_freq
     comment: ''
-    dev_args: remote=127.0.0.1,driver=remote,remote:timeout=100000,remote:driver=rtlsdr,rtl=0
+    dev_args: remote=192.168.1.50,driver=remote,remote:timeout=100000,remote:driver=rtlsdr,rtl=0
     freq_correction: ppm
     gain: gain
     maxoutbuf: '0'

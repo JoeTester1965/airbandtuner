@@ -179,7 +179,7 @@ class airbandtuner(gr.top_block, Qt.QWidget):
         tune_args = ['']
         settings = ['']
 
-        self.soapy_rtlsdr_source_0 = soapy.source(dev, "fc32", 1, 'remote=127.0.0.1,driver=remote,remote:timeout=100000,remote:driver=rtlsdr,rtl=0',
+        self.soapy_rtlsdr_source_0 = soapy.source(dev, "fc32", 1, 'remote=192.168.1.50,driver=remote,remote:timeout=100000,remote:driver=rtlsdr,rtl=0',
                                   stream_args, tune_args, settings)
         self.soapy_rtlsdr_source_0.set_sample_rate(0, samp_rate)
         self.soapy_rtlsdr_source_0.set_gain_mode(0, False)
