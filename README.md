@@ -2,11 +2,13 @@
 
 Will autoscan and tune into the most powerful AM broadcast up in the skies for a large frequency range wherever you tune your RTL dongle or other SoapySDR compatible device.
 
-Edit the **Soapy RTLDSR Source block** -> **Device Arguments** in gnuradio_companion as needed e.g. for a local RTL SDR:
+Edit the **Soapy RTLDSR Source block** -> **Device Arguments** in gnuradio_companion as needed 
+
+e.g. for a local RTL SDR: 
 
 **rtl=0**
 
-Or a [SoapyRemote](https://github.com/pothosware/SoapyRemote) device:
+e.g. [SoapyRemote](https://github.com/pothosware/SoapyRemote) device:
 
 **remote=192.168.1.50,driver=remote,remote:timeout=100000,remote:driver=rtlsdr,rtl=0**
 
@@ -38,10 +40,7 @@ bash ./end.sh
 Tested on Ubuntu 22.04.4 (GnuRadio 3.10). Should also work on 3.9 but not below that.
 
 ```console
-sudo add-apt-repository ppa:gnuradio/gnuradio-releases
-sudo apt-get update
-sudo apt-get install gnuradio
-sudo apt-get install soapysdr-module-all rtl-sdr
+sudo apt-get install gnuradio soapysdr-module-all rtl-sdr
 ```
 
 For SoapyRemote
